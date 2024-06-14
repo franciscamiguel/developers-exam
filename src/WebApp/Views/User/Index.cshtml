@@ -1,0 +1,42 @@
+﻿@using Domain.Entities
+
+@model IEnumerable<User>
+
+@{
+    ViewData["Title"] = "User List";
+}
+
+<h2>User List</h2>
+
+<p>
+    <a href="@Url.Action("Create")">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Surname</th>
+            <th>Login</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.Surname</td>
+                <td>@user.Login</td>
+                <td>@user.Email</td>
+                <td>@user.Age</td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = user.Id })">Edit</a> |
+                    <a href="@Url.Action("Delete", new { id = user.Id })">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

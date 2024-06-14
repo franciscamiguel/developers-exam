@@ -1,0 +1,19 @@
+services:
+
+    mssqlldb:
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        container_name: INSPAND_MSSQL_2017
+        restart: always
+        environment:
+            - SA_PASSWORD=5Gi3re61sXehuSGxMqHX
+            - ACCEPT_EULA=Y
+        ports:
+            - "1433:1433"
+        volumes:
+            - C:\Users\Public\Docker\Volumes\INSPAND_MSSQL_2017:/var/opt/mssql/data
+        networks:
+            - INSPAND-DOCKER-NETWORK
+        
+networks: 
+    SAT-DOCKER-NETWORK:
+        driver: bridge
