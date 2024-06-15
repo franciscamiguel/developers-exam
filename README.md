@@ -1,65 +1,50 @@
 ﻿# INSPAND Developers Exam #
+### Estrutura do Projeto
+Domain
+Responsabilidade: A camada de Domain é responsável pela lógica de negócios e as regras de domínio da aplicação. Contém entidades, agregados, repositórios, serviços de domínio e validações.
 
-### O que é este projeto
+#Infrastructure
+Responsabilidade: A camada de Infrastructure é responsável pela implementação de detalhes técnicos, como a persistência de dados e a comunicação com serviços externos. Nesta camada, implementamos os repositórios, os contextos de banco de dados e qualquer serviço de infraestrutura.
 
-Este projeto visa instigar o desenvolvedor a demostrar seus conhecimentos. Bem como avaliar o entendimento irá ter sobre projeto. Com isso existem situações que não foram implementadas no projeto, deixando assim a cargo do candidato avaliar.
+### WebApp
+Responsabilidade: A camada de WebApp é responsável por expor a aplicação para os usuários finais. Contém controladores, modelos de visão e serviços de aplicação que interagem com as outras camadas para processar e retornar as solicitações HTTP.
 
-### Resumo do projeto
-Este projeto está construído em NetCore na **versão 8.0.205**, com esquema de arquitetura inspirada em **Clean Architecture**, ao qual este conta com 3 sub projetos:
-- Domain
-- Infrastructure
-- Web
+### Comunicação Entre as Camadas
+Domain: Define as regras de negócios e as entidades que serão usadas nas outras camadas.
+Infrastructure: Implementa interfaces definidas na camada de Domain, como repositórios e serviços de infraestrutura.
+WebApp: Faz uso dos serviços e repositórios definidos nas outras camadas para atender às requisições dos usuários.
+A comunicação ocorre da seguinte maneira:
 
-Ferramentas que podem ser usadas para desenvolver:
-- VSCode.
-- VS 2022.
-- Sua criatividade.
+### WebApp interage com Infrastructure para acessar os dados persistidos.
+Infrastructure usa os contratos definidos em Domain para implementar a persistência de dados.
+Domain é independente e não depende de nenhuma outra camada.
+Implementação dos Requisitos
+Listar Usuários:
 
-Utilitários:
-- Há um arquivo docker compose, caso queira utilizar o docker para subir o banco SqlServer. (Não iremos avaliar este conhecimento, apenas um meio mais rápido de subir uma base)
+### Criação de um controlador em WebApp para listar usuários.
+Uso de um serviço de aplicação que acessa o repositório de usuários em Infrastructure.
+Criação, Edição e Exclusão de Usuários:
 
-### Você pode
-- Utilizar pacotes NuGet (https://www.nuget.org/) que julgar necessário.
-- No acesso à banco de dados, você pode usar algum ORM: EF Core, NHibenate, Dapper ou outro, assim como fazer manualmente utilizando ADO. O projeto está com esquema para EF Core, porem pode ser alterado de acordo com sua escolha.
-- Utilizar Dependency Injection.
-- Utilizar FluentValidation.
+### Controladores em WebApp para criar, editar e excluir usuários.
+Validações em Domain para garantir que todos os campos obrigatórios sejam preenchidos e os critérios de aceitação sejam atendidos.
+Serviços de domínio para encapsular a lógica de criação, edição e exclusão.
+Envio de evento para disparo de e-mail ao cadastrar um novo usuário (pode ser implementado um simples log para simular o envio).
+Validações:
 
-### Observações
-- O Banco de dados utilizado pelo projeto é o SqlServer, caso não tenha instalado em sua maquina, pode usar o docker compose para subir este banco.
-- Caso queira pode executar em algum outro banco (SqlServer) de sua escolha e depois enviar atrelado ao projeto o arquivo .sql (Caso utilizar database first).
-
-### Esperamos que você
-- Implemente o desafio proposto.
-- Receber um feedback sobre o projeto.
-- Entretanto, o mais importante é conseguirmos analisar a maneira que você codifica, não tem problema se não for possível terminar tudo no tempo determinado.
-
-### Desafio
-Eu como administrador desejo que seja possível listar usuários cadastrados na plataforma, bem como realizar criação, edição e exclusão dele.
-Para cadastro de usuário é necessário o input de alguns dados como: Nome, Sobrenome,  Login, Senha, E-mail e Idade. Todos os campos são de preenchimento obrigatório. 
-Ao realizar o cadastro de um novo usuário, é desejável que o sistema envie um e-mail de boas-vindas ao usuário.
-
-**Critérios de aceite:**
-- Não pode existir dois ou mais usuários com mesmo e-mail e login. Caso ocorra exibir uma mensagem informando que o e-mail já existe cadastrado.
-- Não pode existir dois ou mais usuários com mesmo nome e sobrenome. Caso ocorra exibir uma mensagem informando que o nome e sobrenome já existe cadastrado.
-- Idade não pode ser menor que 10 e maior que 100. Caso ocorra informar que a idade é inválida.
-- Os campos nome, sobrenome e e-mail não pode ter mais que 255 caracteres. Caso ocorra informar que o limite de caracteres foi atingido.
-
-**Observações:**
-No item de disparo de e-mail não há necessidade de implementar o disparo em si, mas somente chamar o evento que que é responsável por esta ação.
-
-### Feedback
-Como parte da avaliação, desejamos que faça um feedback sobre seu entendimento de cada camada do projeto:
-1. Qual papel da camada de Domain ?
-2. Qual papel da camada de Infrastructure ?
-3. Qual papel da camada de WebApp ?
-4. Faça um resumo de como funciona a comunicação entre as camadas e qual é suas hierarquias.
-5. Aponte um item negativo sobre o projeto que julgar necessário.
-
-### Regras:
-O desenvolvedor irá contar com **5 horas** para desenvolver e fazer os feedbacks.
-
-**Boa Prova!**
-
-**Sucesso!** pode ser aquilo que você é grato por ter conquistado ! :smile:
-
-Powered by **INSPAND Developers**
+### Uso de FluentValidation para validar as regras de domínio (e.g., campos obrigatórios, tamanho máximo, unicidade de email e login, etc).
+Implementação de verificações adicionais no repositório para garantir unicidade de email e login e evitar duplicação.
+Feedback Sobre a Estrutura do Projeto
+Camada de Domain
+Papel: Gerenciar a lógica de negócios, garantindo que todas as regras de domínio sejam aplicadas corretamente.
+Força: Independência de outras camadas, facilitando a testabilidade e a manutenção das regras de negócio.
+### Camada de Infrastructure
+Papel: Implementar detalhes técnicos como a persistência de dados e interações com serviços externos.
+Força: Abstração de detalhes técnicos da lógica de negócios, permitindo mudanças na infraestrutura sem impactar a camada de domínio.
+Camada de WebApp
+Papel: Expor a aplicação ao usuário, processando requisições HTTP e retornando respostas adequadas.
+Força: Centralização da lógica de interface com o usuário, separando preocupações de interface das regras de negócio.
+Comunicação e Hierarquia
+### Hierarquia: Domain -> Infrastructure -> WebApp.
+Comunicação: WebApp chama serviços de Infrastructure, que por sua vez implementam contratos definidos em Domain.
+Item Negativo
+Um ponto negativo que pode ser observado é a falta de documentação e exemplos práticos sobre como configurar e iniciar o projeto. Um README mais detalhado ajudaria a orientar o desenvolvedor sobre as dependências necessárias, como configurar o ambiente de desenvolvimento, e exemplos básicos de uso.

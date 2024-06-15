@@ -1,20 +1,15 @@
-using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Infrastructure.Data.Contexts;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Data.Repositories;
 
-public class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEntity : Entity<TEntity>
+public class Repository<TEntity>(SqlDbContext context) : IDisposable, IRepository<TEntity> where TEntity : Entity<TEntity>
 {
-    protected SqlDbContext Context;
-    protected DbSet<TEntity> DbSet;
-
-    public Repository(SqlDbContext context)
-    {
-        Context = context;
-        DbSet = context.Set<TEntity>();
-    }
+    protected SqlDbContext Context = context;
+    protected DbSet<TEntity> DbSet = context.Set<TEntity>();
 
     public virtual async Task InsertAsync(TEntity entity)
     {
@@ -29,7 +24,9 @@ public class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEnti
 
     public virtual async Task DeleteAsync(long id)
     {
-        TEntity entity = await GetByIdAsync(id) ?? throw new ArgumentNullException("entity");
+        TEntity entity = await GetByIdAsync(id)
+            ?? throw new ArgumentNullException("entity");
+
         DbSet.Remove(entity);
 
         await Context.SaveChangesAsync();
@@ -37,8 +34,7 @@ public class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEnti
 
     public virtual async Task UpdateAsync(TEntity entity)
     {
-        if (entity == null)
-            throw new ArgumentNullException("entity");
+        ArgumentNullException.ThrowIfNull(entity);
 
         entity.SetLastAction();
         DbSet.Update(entity);
@@ -51,6 +47,9 @@ public class Repository<TEntity> : IDisposable, IRepository<TEntity> where TEnti
 
     public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         => await DbSet.ToListAsync();
+
+    public virtual async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate)
+        => await DbSet.AnyAsync(predicate);
 
     public void Dispose()
         => Context.Dispose();

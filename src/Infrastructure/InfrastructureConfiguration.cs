@@ -18,7 +18,7 @@ public static class InfrastructureConfiguration
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
-        
+
         services.AddScoped<IDomainEventHandler, DomainEventHandler>();
 
         services.AddScoped<SqlDbContext>();

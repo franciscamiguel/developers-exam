@@ -1,5 +1,6 @@
 using Domain.Entities;
 using FluentValidation.Results;
+using System.Linq.Expressions;
 
 namespace Domain.Interfaces.Services;
 
@@ -14,4 +15,6 @@ public interface IService<TEntity> where TEntity : Entity<TEntity>
     Task<TEntity> GetByIdAsync(long id);
 
     Task<IEnumerable<TEntity>> GetAllAsync();
+
+    Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> predicate);
 }
