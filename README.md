@@ -1,4 +1,4 @@
-﻿# INSPAND Developers Exam #
+# INSPAND Developers Exam #
 ### Estrutura do Projeto
 Domain
 Responsabilidade: A camada de Domain é responsável pela lógica de negócios e as regras de domínio da aplicação. Contém entidades, agregados, repositórios, serviços de domínio e validações.
